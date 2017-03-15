@@ -7,20 +7,17 @@ using refactor_me.Models;
 
 namespace refactor_me.Api
 {
-    interface IProductService
+    public interface IProductsDatabase
     {
 
         Products GetAll();
 
-        Products SearchByName(string name);
+        Product Get(Guid id);
 
-        Product GetProduct(Guid id);
-
-        void Create(Product product);
-
-        void Update(Guid id, Product product);
+        void Save(Product product);
 
         void Delete(Guid id);
 
+        Products SearchByName(string name);
     }
 }

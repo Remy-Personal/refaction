@@ -7,7 +7,7 @@ using refactor_me.Models;
 
 namespace refactor_me.Api
 {
-    interface IProductOptionService
+    public interface IProductOptionsService
     {
         ProductOption GetOption(Guid productId, Guid id);
 
