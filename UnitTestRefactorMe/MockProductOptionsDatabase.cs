@@ -41,9 +41,9 @@ namespace UnitTestRefactorMe
             return this.options.Single(option => option.Id == id);
         }
 
-        public ProductOptions GetProductOptions(Guid productId)
+        public List<ProductOption> GetProductOptions(Guid productId)
         {
-            return new ProductOptions(this.options.Where(option => option.ProductId.Equals(productId)).ToList());
+            return this.options.Where(option => option.ProductId.Equals(productId)).ToList();
         }
 
         public void Save(ProductOption productOption)

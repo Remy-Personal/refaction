@@ -33,7 +33,7 @@ namespace refactor_me.Services
             return this.productOptionDatabase.Get(id);
         }
 
-        public ProductOptions GetOptions(Guid productId)
+        public List<ProductOption> GetOptions(Guid productId)
         {
             return this.productOptionDatabase.GetProductOptions(productId);
         }

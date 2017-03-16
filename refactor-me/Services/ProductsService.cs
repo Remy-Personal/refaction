@@ -31,7 +31,7 @@ namespace refactor_me.Services
             this.productsDatabase.Delete(id);
         }
 
-        public Products GetAll()
+        public List<Product> GetAll()
         {
             return this.productsDatabase.GetAll();
         }
@@ -41,7 +41,7 @@ namespace refactor_me.Services
             return this.productsDatabase.Get(id);
         }
 
-        public Products SearchByName(string name)
+        public List<Product> SearchByName(string name)
         {
             return this.productsDatabase.SearchByName(name);
         }

@@ -70,13 +70,13 @@ namespace refactor_me.Services
         public void DeleteOptionsGivenProductId(Guid productId)
         {
             var options = GetProductOptions(productId);
-            foreach (var option in options.Items)
+            foreach (var option in options)
             {
                 Delete(option.Id);
             }
         }
 
-        public ProductOptions GetProductOptions(Guid productId)
+        public List<ProductOption> GetProductOptions(Guid productId)
         {
             List<ProductOption> items = new List<ProductOption>();
             var rdr = ExecuteReader($"select * from productoption where productid = '{productId}'");
@@ -87,7 +87,7 @@ namespace refactor_me.Services
 
             }
 
-            return new ProductOptions(items);
+            return items;
 
         }
 

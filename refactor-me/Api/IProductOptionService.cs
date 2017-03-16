@@ -11,7 +11,7 @@ namespace refactor_me.Api
     {
         ProductOption GetOption(Guid productId, Guid id);
 
-        ProductOptions GetOptions(Guid productId);
+        List<ProductOption> GetOptions(Guid productId);
 
         void CreateOption(Guid id, ProductOption option);
 

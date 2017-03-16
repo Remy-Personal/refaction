@@ -15,7 +15,7 @@ namespace refactor_me.Api
 
         void Delete(Guid id);
 
-        ProductOptions GetProductOptions(Guid productId);
+        List<ProductOption> GetProductOptions(Guid productId);
 
         void DeleteOptionsGivenProductId(Guid productId);
 

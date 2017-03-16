@@ -32,9 +32,9 @@ namespace UnitTestRefactorMe
             return this.products.Single(product => product.Id.Equals(id));
         }
 
-        public Products GetAll()
+        public List<Product> GetAll()
         {
-            return new Products(this.products);
+            return this.products;
         }
 
         public void Save(Product newProduct)
@@ -44,9 +44,9 @@ namespace UnitTestRefactorMe
             this.products.Add(newProduct);
         }
 
-        public Products SearchByName(string name)
+        public List<Product> SearchByName(string name)
         {
-            return new Products(this.products.Where(product => product.Name.Equals(name)).ToList());
+            return this.products.Where(product => product.Name.Equals(name)).ToList();
         }
     }
 }

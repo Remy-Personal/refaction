@@ -13,7 +13,7 @@ namespace refactor_me.Services
     public class ProductsDatabase : IProductsDatabase
     {
 
-        public Products GetAll()
+        public List<Product> GetAll()
         {
             var products = new List<Product>();
             var rdr = ExecuteReader($"select * from product");
@@ -23,7 +23,7 @@ namespace refactor_me.Services
                 products.Add(new Product { Id = Guid.Parse(rdr["id"].ToString()), Name = rdr["Name"].ToString(), Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(), Price = decimal.Parse(rdr["Price"].ToString()), DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString()) });
             }
 
-            return new Products(products);
+            return products;
         }
 
         public Product Get(Guid id)
@@ -46,11 +46,6 @@ namespace refactor_me.Services
         public void Delete(Guid id)
         {
             ExecuteReader($"delete from product where id = '{id}'");
-        }
-
-        public Products GetProductOptions(Guid productId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Save(Product product)
@@ -104,7 +99,7 @@ namespace refactor_me.Services
             conn.Close();
         }
 
-        public Products SearchByName(string name)
+        public List<Product> SearchByName(string name)
         {
             var products = new List<Product>();
             var rdr = ExecuteReader($"select * from product where lower(name) like '%{name.ToLower()}%'");
@@ -114,7 +109,7 @@ namespace refactor_me.Services
                 products.Add(new Product { Id = Guid.Parse(rdr["id"].ToString()), Name = rdr["Name"].ToString(), Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(), Price = decimal.Parse(rdr["Price"].ToString()), DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString()) });
             }
 
-            return new Products(products);
+            return products;
         }
 
 

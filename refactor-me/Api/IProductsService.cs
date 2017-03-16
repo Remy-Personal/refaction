@@ -10,9 +10,9 @@ namespace refactor_me.Api
     public interface IProductsService
     {
 
-        Products GetAll();
+        List<Product> GetAll();
 
-        Products SearchByName(string name);
+        List<Product> SearchByName(string name);
 
         Product GetProduct(Guid id);
 

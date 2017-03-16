@@ -10,7 +10,7 @@ namespace refactor_me.Api
     public interface IProductsDatabase
     {
 
-        Products GetAll();
+        List<Product> GetAll();
 
         Product Get(Guid id);
 
@@ -18,6 +18,6 @@ namespace refactor_me.Api
 
         void Delete(Guid id);
 
-        Products SearchByName(string name);
+        List<Product> SearchByName(string name);
     }
 }

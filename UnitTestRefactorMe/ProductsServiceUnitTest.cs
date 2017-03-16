@@ -26,7 +26,7 @@ namespace UnitTestRefactorMe
         [TestMethod]
         public void TestGetAllReturnsAllProducts()
         {
-            var products = this.service.GetAll().Items;
+            var products = this.service.GetAll();
             Assert.AreEqual(2, products.Count);
         }
 
@@ -53,7 +53,7 @@ namespace UnitTestRefactorMe
         [TestMethod]
         public void TestSearchByName()
         {
-            var products = this.service.SearchByName(MockDataUtil.MOCK_PRODUCT_1.Name).Items;
+            var products = this.service.SearchByName(MockDataUtil.MOCK_PRODUCT_1.Name);
 
             Assert.AreEqual(1, products.Count);
             Assert.IsTrue(products[0].Equals(MockDataUtil.MOCK_PRODUCT_1));
@@ -84,7 +84,7 @@ namespace UnitTestRefactorMe
         {
             this.service.Delete(new Guid(MockDataUtil.MOCK_PRODUCT_GUID_1));
 
-            var products = this.service.GetAll().Items;
+            var products = this.service.GetAll();
             Assert.AreEqual(1, products.Count);
             Assert.AreEqual(new Guid(MockDataUtil.MOCK_PRODUCT_GUID_2), products[0].Id);
         }
@@ -93,12 +93,12 @@ namespace UnitTestRefactorMe
         public void TestDeletingProductRemovesProductOptions()
         {
             var id = new Guid(MockDataUtil.MOCK_PRODUCT_GUID_1);
-            var options = this.mockProductOptionsDatabase.GetProductOptions(id).Items;
+            var options = this.mockProductOptionsDatabase.GetProductOptions(id);
             Assert.AreEqual(2, options.Count);
 
             this.service.Delete(id);
 
-            options = this.mockProductOptionsDatabase.GetProductOptions(id).Items;
+            options = this.mockProductOptionsDatabase.GetProductOptions(id);
             Assert.AreEqual(0, options.Count);
         }
     

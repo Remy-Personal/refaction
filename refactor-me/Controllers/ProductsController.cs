@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using refactor_me.Api;
@@ -21,14 +22,14 @@ namespace refactor_me.Controllers
 
         [Route]
         [HttpGet]
-        public Products GetAll()
+        public List<Product> GetAll()
         {
             return this.productsService.GetAll();
         }
 
         [Route]
         [HttpGet]
-        public Products SearchByName(string name)
+        public List<Product> SearchByName(string name)
         {
             return this.productsService.SearchByName(name);
         }
@@ -63,7 +64,7 @@ namespace refactor_me.Controllers
 
         [Route("{productId}/options")]
         [HttpGet]
-        public ProductOptions GetOptions(Guid productId)
+        public List<ProductOption> GetOptions(Guid productId)
         {
             return this.productOptionService.GetOptions(productId);
         }

@@ -40,12 +40,12 @@ namespace UnitTestRefactorMe
         public void TestDeleteOption()
         {
             var productId = new Guid(MockDataUtil.MOCK_PRODUCT_GUID_1);
-            var option = this.service.GetOptions(productId).Items;
+            var option = this.service.GetOptions(productId);
             Assert.AreEqual(2, option.Count);
 
             this.service.DeleteOption(new Guid(MockDataUtil.MOCK_PRODUCT_OPTION_GUID_1));
 
-            option = this.service.GetOptions(productId).Items;
+            option = this.service.GetOptions(productId);
             Assert.AreEqual(1, option.Count);
         }
 
@@ -61,7 +61,7 @@ namespace UnitTestRefactorMe
         [TestMethod]
         public void TestGetAllOptionsForProduct()
         {
-            var options = this.service.GetOptions(new Guid(MockDataUtil.MOCK_PRODUCT_GUID_1)).Items;
+            var options = this.service.GetOptions(new Guid(MockDataUtil.MOCK_PRODUCT_GUID_1));
 
             Assert.AreEqual(2, options.Count);
         }
