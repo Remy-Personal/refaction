@@ -10,93 +10,23 @@ using refactor_me.Models;
 
 namespace refactor_me.Services
 {
-    public class ProductsDatabase : IProductsDatabase
+    public class ProductsDatabase : DatabaseOperations<Product>, IProductsDatabase
     {
+        private static readonly string DATABASE_NAME = "product";
 
         public List<Product> GetAll()
         {
-            var products = new List<Product>();
-            var rdr = ExecuteReader($"select * from product");
-
-            while (rdr.Read())
-            {
-                products.Add(new Product { Id = Guid.Parse(rdr["id"].ToString()), Name = rdr["Name"].ToString(), Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(), Price = decimal.Parse(rdr["Price"].ToString()), DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString()) });
-            }
-
-            return products;
+            return GetMultiple($"select * from product");
         }
 
-        public Product Get(Guid id)
+        protected override void Update(Product model)
         {
-            var rdr = ExecuteReader($"select * from product where id = '{id}'");
-            if (!rdr.Read())
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-
-            return new Product { Id = Guid.Parse(rdr["Id"].ToString()),
-                Name = rdr["Name"].ToString(),
-                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
-                Price = decimal.Parse(rdr["Price"].ToString()),
-                DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
-            };
+            ExecuteNonQuery($"update product set name = '{model.Name}', description = '{model.Description}', price = {model.Price}, deliveryprice = {model.DeliveryPrice} where id = '{model.Id}'");
         }
 
-
-        public void Delete(Guid id)
+        protected override void Create(Product model)
         {
-            ExecuteReader($"delete from product where id = '{id}'");
-        }
-
-        public void Save(Product product)
-        {
-            var id = product.Id;
-
-            if (AlreadyInDatabase(product))
-            {
-                Update(product);
-            }
-            else
-            {
-                Create(product);
-            }
-        }
-
-        private Boolean AlreadyInDatabase(Product product)
-        {
-            var id = product.Id;
-            var rdr = ExecuteReader($"select * from product where id = '{id}'");
-
-            return rdr.Read();
-        }
-
-        private void Update(Product product)
-        {
-            ExecuteNonQuery($"update product set name = '{product.Name}', description = '{product.Description}', price = {product.Price}, deliveryprice = {product.DeliveryPrice} where id = '{product.Id}'");
-        }
-
-        private void Create(Product product)
-        {
-            ExecuteNonQuery($"insert into product (id, name, description, price, deliveryprice) values ('{product.Id}', '{product.Name}', '{product.Description}', {product.Price}, {product.DeliveryPrice})");
-        }
-
-        private SqlDataReader ExecuteReader(String cmdString)
-        {
-            var conn = Helpers.NewConnection();
-            var cmd = new SqlCommand(cmdString, conn);
-            conn.Open();
-
-            return cmd.ExecuteReader();
-        }
-
-        private void ExecuteNonQuery(String cmdString)
-        {
-            var conn = Helpers.NewConnection();
-            var cmd = new SqlCommand(cmdString, conn);
-
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            ExecuteNonQuery($"insert into product (id, name, description, price, deliveryprice) values ('{model.Id}', '{model.Name}', '{model.Description}', {model.Price}, {model.DeliveryPrice})");
         }
 
         public List<Product> SearchByName(string name)
@@ -105,13 +35,33 @@ namespace refactor_me.Services
             var rdr = ExecuteReader($"select * from product where lower(name) like '%{name.ToLower()}%'");
 
             while (rdr.Read())
-            {
-                products.Add(new Product { Id = Guid.Parse(rdr["id"].ToString()), Name = rdr["Name"].ToString(), Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(), Price = decimal.Parse(rdr["Price"].ToString()), DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString()) });
+            {          
+                products.Add(MapModel(rdr));
             }
 
             return products;
         }
 
+        protected override string GetDatabaseName()
+        {
+            return DATABASE_NAME;
+        }
 
+        protected override Guid GetId(Product model)
+        {
+            return model.Id;
+        }
+
+        protected override Product MapModel(SqlDataReader rdr)
+        {
+            return new Product
+            {
+                Id = Guid.Parse(rdr["Id"].ToString()),
+                Name = rdr["Name"].ToString(),
+                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
+                Price = decimal.Parse(rdr["Price"].ToString()),
+                DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
+            };
+        }
     }
 }

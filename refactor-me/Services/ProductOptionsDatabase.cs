@@ -10,59 +10,16 @@ using refactor_me.Models;
 
 namespace refactor_me.Services
 {
-    public class ProductOptionsDatabase : IProductOptionsDatabase
+    public class ProductOptionsDatabase : DatabaseOperations<ProductOption>, IProductOptionsDatabase
     {
+        private static readonly string DATABASE_NAME = "productoption";
 
-        public ProductOption Get(Guid id)
-        {
-            var rdr = ExecuteReader($"select * from productoption where id = '{id}'");
-            if (!rdr.Read())
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-
-            return new ProductOption {
-                Id = Guid.Parse(rdr["Id"].ToString()),
-                ProductId = Guid.Parse(rdr["ProductId"].ToString()),
-                Name = rdr["Name"].ToString(),
-                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString()
-            };
-        }
-
-        public void Save(ProductOption productOption)
-        {
-
-            var id = productOption.Id;
-
-            if (AlreadyInDatabase(productOption))
-            {
-                Update(productOption);
-            }
-            else
-            {
-                Create(productOption);
-            }
-        }
-
-        public void Delete(Guid id)
-        {
-            ExecuteReader($"delete from productoption where id = '{id}'");
-        }
-
-        private Boolean AlreadyInDatabase(ProductOption productOption)
-        {
-            var id = productOption.Id;
-            var rdr = ExecuteReader($"select * from productoption where id = '{id}'");
-
-            return rdr.Read();
-        }
-
-        private void Update(ProductOption productOption)
+        protected override void Update(ProductOption productOption)
         {
             ExecuteNonQuery($"update productoption set name = '{productOption.Name}', description = '{productOption.Description}' where id = '{productOption.Id}'");
         }
 
-        private void Create(ProductOption productOption)
+        protected override void Create(ProductOption productOption)
         {
             ExecuteNonQuery($"insert into productoption (id, productid, name, description) values ('{productOption.Id}', '{productOption.ProductId}', '{productOption.Name}', '{productOption.Description}')");
         }
@@ -78,36 +35,28 @@ namespace refactor_me.Services
 
         public List<ProductOption> GetProductOptions(Guid productId)
         {
-            List<ProductOption> items = new List<ProductOption>();
-            var rdr = ExecuteReader($"select * from productoption where productid = '{productId}'");
+            return GetMultiple($"select * from productoption where productid = '{productId}'");
+        }
 
-            while (rdr.Read())
+        protected override string GetDatabaseName()
+        {
+            return DATABASE_NAME;
+        }
+
+        protected override Guid GetId(ProductOption model)
+        {
+            return model.Id;
+        }
+
+        protected override ProductOption MapModel(SqlDataReader rdr)
+        {
+            return new ProductOption
             {
-                items.Add(new ProductOption { Id = Guid.Parse(rdr["Id"].ToString()), ProductId = Guid.Parse(rdr["ProductId"].ToString()), Name = rdr["Name"].ToString(), Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString() });
-
-            }
-
-            return items;
-
-        }
-
-        private SqlDataReader ExecuteReader(String cmdString)
-        {
-            var conn = Helpers.NewConnection();
-            var cmd = new SqlCommand(cmdString, conn);
-            conn.Open();
-
-            return cmd.ExecuteReader();
-        }
-
-        private void ExecuteNonQuery(String cmdString)
-        {
-            var conn = Helpers.NewConnection();
-            var cmd = new SqlCommand(cmdString, conn);
-
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
+                Id = Guid.Parse(rdr["Id"].ToString()),
+                ProductId = Guid.Parse(rdr["ProductId"].ToString()),
+                Name = rdr["Name"].ToString(),
+                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString()
+            };
         }
     }
 }
