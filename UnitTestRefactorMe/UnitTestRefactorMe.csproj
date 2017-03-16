@@ -48,12 +48,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MockDataUtil.cs" />
-    <Compile Include="MockProductDatabase.cs" />
-    <Compile Include="MockProductOptionsDatabase.cs" />
-    <Compile Include="ProductsServiceUnitTest.cs" />
+    <Compile Include="Utils\MockDataUtil.cs" />
+    <Compile Include="Utils\MockProductDatabase.cs" />
+    <Compile Include="Utils\MockProductOptionsDatabase.cs" />
+    <Compile Include="Tests\ProductsServiceUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProductOptionsServiceUnitTest.cs" />
+    <Compile Include="Tests\ProductOptionsServiceUnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

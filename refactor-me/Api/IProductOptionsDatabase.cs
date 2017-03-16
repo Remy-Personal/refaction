@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using refactor_me.Models;
 
 namespace refactor_me.Api
@@ -18,7 +15,6 @@ namespace refactor_me.Api
         List<ProductOption> GetProductOptions(Guid productId);
 
         void DeleteOptionsGivenProductId(Guid productId);
-
 
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Web.Http;
 using refactor_me.Api;
 using refactor_me.Models;
